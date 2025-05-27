@@ -1,4 +1,4 @@
-<h1>Registre Seu Humor</h1><h2>Status do projeto</h2>
+<h1>Sentir +</h1><h2>Status do projeto</h2>
 <p>Em desenvolvimento</p><h2>Tecnologias aplicadas</h2>
 <ul>
     <li>JavaScript</li>
