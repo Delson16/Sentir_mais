@@ -1,0 +1,134 @@
+@charset "UTF-8";
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+:root{
+    --main-color: #2E8B57;
+    --secundary-color: #f5f5f5;
+    --font-color: #292929;
+}
+.header-init{
+    background-color: var(--secundary-color);
+}
+a{
+    text-decoration: none;
+    color: var(--font-color);
+}
+a:hover{
+    text-decoration: underline;
+}
+main{
+    background-color: var(--secundary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 90px;
+}
+.redirect-login{
+    font-weight: 600;
+}
+
+.heart-image{
+    height: 200px;
+}
+
+section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-inline: 20px;
+}
+.introduction{
+    text-align: center;
+    color: var(--font-color);
+}
+h1{
+    color: var(--main-color);
+    font-size: 3.5em;
+}
+
+.features{
+    width: 100%;
+    background-color: var(--main-color);
+    color: var(--secundary-color);
+    row-gap: 20px;
+    margin-top: -10px;
+    margin-bottom: -10px;
+}
+dt::before{
+    content: "• ";
+}
+.benefits h2{
+    margin-bottom: 50px;
+    text-align: center;
+}
+.cards{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+.card{
+    box-shadow: 4px 4px 4px rgb(102, 102, 102);
+    width: 250px;
+    height: 300px;
+    padding: 20px;
+}
+.card h3{
+    font-size: 1.5em;
+    text-align: center;
+    color: var(--main-color);
+}
+
+.btn-start{
+    margin-top: 50px;
+    background-color: var(--main-color);
+    color: var(--secundary-color);
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 200px;
+        transition: ease .4s;
+}
+.btn-start:hover{
+    scale: 1.1;
+        transition: ease .4s;
+}
+footer{
+    background-color: var(--main-color);
+    color: var(--secundary-color);
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.foter-nav ul{
+    display: flex;
+    flex-direction: column;
+}
+.footer-nav li{
+    list-style: none;
+}
+.footer-nav a{
+    color: var(--secundary-color);
+}
+.footer-nav img{
+    width: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .cards{
+        flex-direction: column;
+    }
+    footer{
+        flex-direction: column;
+    }
+    footer p{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+}
