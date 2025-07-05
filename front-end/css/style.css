@@ -234,8 +234,22 @@ footer{
     font-size: 1.6em;
 }
 .main-home{
-    min-height: 90vh;
+    min-height: 75vh;
 }
+
+.month-record{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.month-record input{
+    border: solid var(--main-color) 1px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+
 
 @media screen and (max-width: 768px) {
     .cards{
