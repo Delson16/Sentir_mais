@@ -195,6 +195,48 @@ footer{
     color: var(--secundary-color);
 }
 
+.day{
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+}
+.day input{
+    border: none;
+    text-align: center;
+    font-size: 1.5em;
+}
+.day button{
+    border: none;
+    background-color: transparent;
+}
+.day img{
+    height: 2em;
+}
+.emotion-table-container{
+    width: 80%;
+    text-align: center;
+}
+.table img{
+    height: 20px;
+}
+.table img:hover{
+    cursor: pointer;
+}
+.add-emotion{
+    background-color: var(--main-color);
+    color: var(--secundary-color);
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+    border: none;
+    font-weight: 800;
+    font-size: 1.6em;
+}
+.main-home{
+    min-height: 90vh;
+}
+
 @media screen and (max-width: 768px) {
     .cards{
         flex-direction: column;
