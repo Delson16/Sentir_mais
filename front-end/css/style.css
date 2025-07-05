@@ -27,6 +27,17 @@ main{
     align-items: center;
     padding-bottom: 90px;
 }
+.authentication-main{
+    height: 100vh;
+    padding: 0;
+    justify-content: center;
+}
+.authentication-main h1{
+    font-size: 2em;
+}
+.authentication-main label{
+    font-size: 0.9em;
+}
 .redirect-login{
     font-weight: 600;
 }
@@ -116,6 +127,72 @@ footer{
 }
 .footer-nav img{
     width: 20px;
+}
+
+/* edições referentes aos formulário */
+
+.form{
+    min-width: 300px;
+    padding: 20px;
+    box-shadow: 2px 2px 4px var(--font-color);
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+.btn-submit{
+    padding: 10px;
+    font-weight: 500;
+    background-color: var(--main-color);
+    border: none;
+    color: var(--secundary-color);
+    width: 100%;
+    border-radius: 5px;
+}
+.form a{
+    font-size: 0.75em;
+}
+
+/* edições da home */
+.header{
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    background-color: var(--main-color);
+}
+.header h1{
+    color: var(--secundary-color);
+    font-size: 2em;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+}
+.header h1 img{
+    height: 1.4em;
+}
+.hamburguer{
+    height: 2em;
+}
+.hamburguer:hover{
+    cursor: pointer;
+}
+.header-nav ul{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+.header-nav li{
+    list-style: none;
+}
+.header-nav button{
+    background-color: var(--main-color);
+    width: 300px;
+    height: 50px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    color: var(--secundary-color);
 }
 
 @media screen and (max-width: 768px) {
