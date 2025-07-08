@@ -41,7 +41,7 @@
 <script>
 
     const form = document.querySelector("#loginForm");
-    form.addEventListener("submit", function(e){
+    form.addEventListener("submit", async function(e){
 
         e.preventDefault();
 
@@ -56,8 +56,9 @@
         errorMessage += valid("-> Senha inválida. A senha deve ter no mínimo 4 caracteres e não pode conter espaços.", passwordRegEx, password.trim());
 
         if(errorMessage == ""){
-            // Nesta parte será criado um objeto com os dados e realizada uma requisição fetch. No momento, comm a API ainda não foi desenvolvida, será somenete adicionado um redirect para a próxima página.
-            location.href = "/home.html";
+            let response = await fetch("http://localhost:8080/auth/ola");
+            let data = await response.text();
+            alert(data);
         } else {
             alert("campos inválidos \n\n" + errorMessage);
         }
