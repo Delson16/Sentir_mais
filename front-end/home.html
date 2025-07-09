@@ -40,6 +40,7 @@
                 <ul>
                     <li><a href="home.html"><button>Home</button></a></li>
                     <li><a href="record.html"><button>Histórico de Atividades</button></a></li>
+                    <button onclick="closeSession()">Sair</button>
                 </ul>
             </nav>
         </div>
@@ -53,7 +54,7 @@
             <button><img src="img/arrow-right.png" alt="seta para avançar o dia"></button>
         </section>
 
-        <h2>Como você está hoje?</h2>
+        <h2 id="title"></h2>
 
         <div class="emotion-table-container">
             <table class="table">
@@ -147,5 +148,19 @@
         </div>
     </div>
 </body>
+
+<script>
+
+    const username = sessionStorage.getItem("name");
+    const token = sessionStorage.getItem("token");
+    if (username == null) {
+        location.href = "index.html";
+    }
+
+
+    let title = document.querySelector("#title");
+    title.textContent = "Olá " + username + "! Como você está hoje?";
+
+</script>
 
 </html>

@@ -42,8 +42,9 @@
 
 <script>
 
+
     const form = document.querySelector("#registerForm");
-    form.addEventListener("submit", function(e){
+    form.addEventListener("submit", async function(e){
 
         e.preventDefault();
 
@@ -62,8 +63,29 @@
         errorMessage += valid("-> Senha inválida. A senha deve ter no mínimo 4 caracteres, no máximo 8 e não pode conter espaços.", passwordRegEx, password.trim());
 
         if(errorMessage.length == 0){
-            // Nesta parte será criado um objeto com os dados e realizada uma requisição fetch. No momento, comm a API ainda não foi desenvolvida, será somenete adicionado um redirect para a próxima página.
-            location.href = "/home.html";
+            let user = {
+                name : name,
+                login : email,
+                password : password
+            };
+
+            let response = await fetch("http://localhost:8080/auth/register",
+                {
+                    method : "POST",
+                    headers : {"Content-type" : "application/json"},
+                    body : JSON.stringify(user)
+                }
+            );
+
+            if(response.ok){
+                let userResponse = await response.json();
+                sessionStorage.setItem("token", userResponse.token);
+                sessionStorage.setItem("name", userResponse.name);
+                location.href = "/home.html";
+            } else {
+                showError(response);
+            }
+
         } else {
             alert("campos inválidos \n" + errorMessage);
         }

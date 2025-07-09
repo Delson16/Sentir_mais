@@ -56,14 +56,35 @@
         errorMessage += valid("-> Senha inválida. A senha deve ter no mínimo 4 caracteres e não pode conter espaços.", passwordRegEx, password.trim());
 
         if(errorMessage == ""){
-            let response = await fetch("http://localhost:8080/auth/ola");
-            let data = await response.text();
-            alert(data);
+
+            let user = {
+                login : email,
+                password : password
+            }
+
+            let response = await fetch("http://localhost:8080/auth/login",
+                {
+                    method : "POST",
+                    headers : {"Content-type" : "application/json"},
+                    body : JSON.stringify(user)
+                }
+            );
+
+            if(response.ok){
+                let userResponse = await response.json();
+                sessionStorage.setItem("token", userResponse.token);
+                sessionStorage.setItem("name", userResponse.name);
+                location.href = "/home.html";
+            } else {
+                showError(response);
+            }
+            
         } else {
             alert("campos inválidos \n\n" + errorMessage);
         }
 
     })
+
 
 </script>
 </html>
