@@ -29,6 +29,12 @@ public class GlobalControllerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
     
+    @ExceptionHandler(EmotionAlreadyExistsException.class)
+    public ResponseEntity<Object> EmotionAlreadyExistsException(EmotionAlreadyExistsException e) {
+        var body = new ErrorMessage(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+    
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity badCredentialsException(){
         var body = new ErrorMessage("Login ou senha inválidos", HttpStatus.BAD_REQUEST);

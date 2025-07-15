@@ -2,6 +2,8 @@ package com.delson.sentir_mais.service;
 
 import com.delson.sentir_mais.domain.Emotion;
 import com.delson.sentir_mais.domain.User;
+import com.delson.sentir_mais.dto.EmotionRecordContent;
+import com.delson.sentir_mais.dto.EmotionRecordResponseDto;
 import com.delson.sentir_mais.dto.EmotionRegisterDto;
 import com.delson.sentir_mais.dto.EmotionUpdateDto;
 import com.delson.sentir_mais.exception.EmotionAlreadyExistsException;
@@ -9,6 +11,7 @@ import com.delson.sentir_mais.exception.EmotionNotFoundException;
 import com.delson.sentir_mais.repository.EmotionRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,10 +78,39 @@ public class EmotionService {
         emotionRepository.save(emotionUpdate);        
     }
 
+    public List<EmotionRecordResponseDto> getRecordEmotion(String userId, String dateStr){
+        
+        LocalDate date = parseLocalDate(dateStr);
+        date.getMonthValue();
+        date.getYear();
+        
+         List<EmotionRecordResponseDto> response = new ArrayList();
+        List<EmotionRecordContent> data = emotionRepository.findEmotionRecordByMonthAndUser(date.getMonthValue(), date.getYear(), userId);
+        
+        if(!data.isEmpty()){
+            int amount = 0;
+            for(EmotionRecordContent t : data){
+                amount += t.getAmount();
+            }
+            
+            for(EmotionRecordContent t : data){
+                float percentage = ((float)t.getAmount() / amount) * 100;
+                
+                var dto = new EmotionRecordResponseDto(t.getEmotion(), t.getEmoji(), t.getAmount(), percentage); 
+                response.add(dto);
+            }
+            
+        }
+        
+        return response;
+
+    }
+    
     public LocalDate parseLocalDate(String dataStr) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(dataStr, formatter);
     }
+    
     
     
 

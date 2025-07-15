@@ -53,7 +53,7 @@
                 <input type="month" id="date" value="2025-07">
             </form>
 
-            <table class="table">
+            <table class="table" id="table">
                 <thead>
                     <tr>
                         <td>Emoção</td>
@@ -61,37 +61,8 @@
                         <td>Porcentagem</td>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>&#128512; | Alegria</td>
-                        <td>12</td>
-                        <td>40%</td>
-                    </tr>
-                    <tr>
-                        <td>&#128577; | Tristeza</td>
-                        <td>6</td>
-                        <td>20%</td>
-                    </tr>
-                    <tr>
-                        <td>&#128545; | Raiva</td>
-                        <td>4</td>
-                        <td>13,3%</td>
-                    </tr>
-                    <tr>
-                        <td>&#128528; | Neutro</td>
-                        <td>5</td>
-                        <td>16,7%</td>
-                    </tr>
-                    <tr>
-                        <td>&#128558; | Surpresa</td>
-                        <td>3</td>
-                        <td>10%</td>
-                    </tr>
-                </tbody>
             </table>
         </section>
-
-
 
     </main>
 
@@ -120,9 +91,85 @@
 
         const username = sessionStorage.getItem("name");
         const token = sessionStorage.getItem("token");
+        const userId = sessionStorage.getItem("id");
         if (username == null) {
             location.href = "index.html";
         }
+
+        function createRow(emotion){
+            let tr = document.createElement("tr");
+
+            let td1 = document.createElement("td");
+            td1.innerHTML = emotion.emoji + " | " + emotion.emotion;
+            tr.appendChild(td1);
+
+            let td2 = document.createElement("td");
+            td2.textContent = emotion.amount;
+            tr.appendChild(td2);
+
+            let td3 = document.createElement("td");
+            td3.textContent = emotion.percentage.toFixed(1) + "%";
+            tr.appendChild(td3);
+
+            return tr;
+        }
+
+        function populateTable(emotions) {
+            let table = document.querySelector("#table");
+
+            let oldTbody = table.querySelector("tbody");
+            if (oldTbody) {
+                table.removeChild(oldTbody);
+            }
+
+            if (emotions.length > 0) {
+                let tbody = document.createElement("tbody");
+                emotions.forEach(e => {
+                    let row = createRow(e);
+                    tbody.appendChild(row);
+                });
+                table.appendChild(tbody);
+            } else {
+                let tbody = document.createElement("tbody");
+                let tr = document.createElement("tr");
+                let td = document.createElement("td");
+
+                td.textContent = "Nenhuma emoção foi registrada neste mês";
+                td.colSpan = 3;
+
+                tr.appendChild(td);
+                tbody.appendChild(tr);
+                table.appendChild(tbody);
+            }
+        }
+
+        async function requestRecordEmotion() {
+            try {
+                let date = dateInput.value;
+                let response = await fetch("http://localhost:8080/emotion/record/" + userId + "/" + date + "-01",
+                    {
+                        headers: { "Authorization": "Bearer " + token }
+                    }
+                );
+
+                if (response.ok) {
+                    let data = await response.json();
+                    populateTable(data);
+                } else {
+                    showError(response);
+                }
+
+            } catch (error) {
+                alert("Houve um erro na busca das emoções. Tente novamente mais tarde.");
+            }
+        }
+
+        requestRecordEmotion();
+
+        dateInput.addEventListener("change", () => {
+            requestRecordEmotion();
+        });
+
     </script>
 
 </body>
