@@ -81,6 +81,7 @@
                 let userResponse = await response.json();
                 sessionStorage.setItem("token", userResponse.token);
                 sessionStorage.setItem("name", userResponse.name);
+                sessionStorage.setItem("id", userResponse.id);
                 location.href = "/home.html";
             } else {
                 showError(response);

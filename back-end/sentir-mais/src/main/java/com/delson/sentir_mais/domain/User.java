@@ -1,10 +1,12 @@
 package com.delson.sentir_mais.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.List;
@@ -37,6 +39,9 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     private String Password;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Emotion> emotions;
 
     public User(String name, String login, String Password) {
         this.name = name;

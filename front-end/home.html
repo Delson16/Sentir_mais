@@ -49,15 +49,15 @@
     <main class="main-home">
 
         <section class="day">
-            <button><img src="img/arrow-left.png" alt="seta para retroceder o dia"></button>
-            <input type="text" value="03/07/2025" disabled>
-            <button><img src="img/arrow-right.png" alt="seta para avançar o dia"></button>
+            <button onclick="changeDate(-1)"><img src="img/arrow-left.png" alt="seta para retroceder o dia"></button>
+            <input type="text" value="03/07/2025" disabled id="date">
+            <button onclick="changeDate(1)"><img src="img/arrow-right.png" alt="seta para avançar o dia"></button>
         </section>
 
         <h2 id="title"></h2>
 
         <div class="emotion-table-container">
-            <table class="table">
+            <table class="table" id="table">
                 <thead>
                     <tr>
                         <td>Emoji</td>
@@ -66,14 +66,6 @@
                         <td>Opções</td>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>&#128512;</td>
-                        <td>Alegria</td>
-                        <td><img src="img/trash.png" alt="excluir"></td>
-                        <td><img src="img/edit.png" alt="editar"></td>
-                    </tr>
-                </tbody>
             </table>
 
             <button class="add-emotion" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
@@ -81,6 +73,7 @@
 
 
     </main>
+
 
     <footer>
         <nav class="footer-nav">
@@ -134,8 +127,8 @@
                             <option value="&#128528;/tédio">&#128528; Tédio</option>
                             <option value="&#129394;/nostalgia">&#129394; Nostalgia</option>
                         </select>
-                        <label for="notation" class="form-label">Anotação</label>
-                        <textarea id="notation"
+                        <label for="description" class="form-label">Anotação</label>
+                        <textarea id="description"
                             placeholder="Uma anotação opcional. Pode detalhar aqui o que sentiu ou o que motivou este sentimento."
                             class="form-control mb-3" maxlength="255"></textarea>
 
@@ -147,19 +140,303 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="editModalEmotion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cadastre sua emoção!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEmotionEdit" class="form-emotion">
+                        <label for="emotionEdit" class="form-label">Como você está hoje?</label>
+                        <select name="emotionEdit" id="emotionEdit" class="form-control mb-3">
+                            <option disabled>--- Emoções Positivas ---</option>
+                            <option value="&#128516;/alegria">&#128516; Alegria</option>
+                            <option value="&#128525;/amor">&#128525; Amor</option>
+                            <option value="&#127775;/esperança">&#127775; Esperança</option>
+                            <option value="&#128591;/gratidão">&#128591; Gratidão</option>
+                            <option value="&#128524;/calma">&#128524; Calma / Paz</option>
+                            <option value="&#127941;/orgulho">&#127941; Orgulho</option>
+                            <option value="&#129321;/entusiasmo">&#129321; Entusiasmo</option>
+                            <option value="&#128170;/confiança">&#128170; Confiança</option>
+                            <option disabled>--- Emoções Negativas ---</option>
+                            <option value="&#128546;/tristeza">&#128546; Tristeza</option>
+                            <option value="&#128544;/raiva">&#128544; Raiva</option>
+                            <option value="&#128560;/medo">&#128560; Medo</option>
+                            <option value="&#128532;/culpa">&#128532; Culpa</option>
+                            <option value="&#128563;/vergonha">&#128563; Vergonha</option>
+                            <option value="&#128556;/ansiedade">&#128556; Ansiedade</option>
+                            <option value="&#128548;/frustração">&#128548; Frustração</option>
+                            <option value="&#128542;/solidão">&#128542; Solidão</option>
+                            <option disabled>--- Emoções Neutras ou Mistas ---</option>
+                            <option value="&#128560;/surpresa">&#128560; Surpresa</option>
+                            <option value="&#128533;/confusão">&#128533; Confusão</option>
+                            <option value="&#128553;/cansaço">&#128553; Cansaço</option>
+                            <option value="&#128528;/tédio">&#128528; Tédio</option>
+                            <option value="&#129394;/nostalgia">&#129394; Nostalgia</option>
+                        </select>
+                        <label for="descriptionEdit" class="form-label">Anotação</label>
+                        <textarea id="descriptionEdit"
+                            placeholder="Uma anotação opcional. Pode detalhar aqui o que sentiu ou o que motivou este sentimento."
+                            class="form-control mb-3" maxlength="255"></textarea>
+                        <input type="hidden" id="idEmotion">
+
+                        <input type="submit" value="Atualizar emoção" class="btn-submit">
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 
 <script>
 
     const username = sessionStorage.getItem("name");
     const token = sessionStorage.getItem("token");
+    const userId = sessionStorage.getItem("id");
     if (username == null) {
         location.href = "index.html";
     }
 
+    function setToday() {
+        let data = document.querySelector("#date");
+
+        let today = new Date();
+        let day = String(today.getDate()).padStart(2, '0');
+        let month = String(today.getMonth() + 1).padStart(2, '0');
+        let year = today.getFullYear();
+
+        data.value = day + "/" + month + "/" + year;
+    }
+
+    setToday();
 
     let title = document.querySelector("#title");
     title.textContent = "Olá " + username + "! Como você está hoje?";
+
+    function getDate() {
+        let date = document.querySelector("#date").value;
+        let dateFormatter = date.split("/");
+        let finalDate = dateFormatter[2] + "-" + dateFormatter[1] + "-" + dateFormatter[0];
+        return finalDate;
+    }
+
+    function createRow(emotion) {
+        let tr = document.createElement("tr")
+
+        let td1 = document.createElement("td");
+        td1.innerHTML = emotion.emoji;
+        tr.appendChild(td1);
+
+        let td2 = document.createElement("td");
+        td2.textContent = emotion.emotion;
+        tr.appendChild(td2);
+
+        let td3 = document.createElement("td");
+        let trash = document.createElement("img");
+        trash.src = "img/trash.png"
+        td3.appendChild(trash);
+        td3.onclick = () => deleteEmotion(emotion.id);
+        tr.appendChild(td3);
+
+        let td4 = document.createElement("td");
+        let edit = document.createElement("img");
+        edit.src = "img/edit.png";
+        td4.appendChild(edit);
+        td4.onclick = () => openModalEditEmotion(emotion.id, emotion.emotion, emotion.emoji, emotion.description);
+        tr.appendChild(td4);
+
+        return tr;
+    }
+
+    function populateTable(emotions) {
+
+        let table = document.querySelector("#table");
+
+        let oldTbody = table.querySelector("tbody");
+        if (oldTbody) {
+            table.removeChild(oldTbody);
+        }
+
+        if (emotions.length > 0) {
+            let tbody = document.createElement("tbody");
+
+            emotions.forEach(emotion => {
+                let row = createRow(emotion);
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(tbody);
+
+        } else {
+            let tbody = document.createElement("tbody");
+            let tr = document.createElement("tr");
+            let td = document.createElement("td");
+            td.colSpan = 4;
+            td.textContent = "Nenhuma emoção registrada neste dia.";
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            table.appendChild(tbody);
+        }
+    }
+
+    async function requestEmotions() {
+        try {
+            let response = await fetch("http://localhost:8080/emotion/" + sessionStorage.getItem("id") + "/" + getDate(),
+                {
+                    method: "GET",
+                    headers: { "Authorization": "Bearer " + token },
+                }
+            )
+
+            if (response.ok) {
+                let emotions = await response.json();
+                populateTable(emotions);
+            } else {
+                showError(response);
+            }
+
+        } catch (error) {
+            alert("Alguma coisa deu errada. Tente noavemente mais tarde.");
+        }
+    }
+
+    function changeDate(value) {
+        let input = document.querySelector("#date");
+
+        let dateFormatter = input.value.split("/");
+
+        let data = new Date(dateFormatter[2], dateFormatter[1] - 1, dateFormatter[0]);
+
+        data.setDate(data.getDate() + value);
+
+        let day = String(data.getDate()).padStart(2, '0');
+        let month = String(data.getMonth() + 1).padStart(2, '0');
+        let year = data.getFullYear();
+
+        let finalDate = day + "/" + month + "/" + year;
+        input.value = finalDate;
+
+        requestEmotions();
+    }
+
+    async function deleteEmotion(id) {
+        try {
+
+            let response = await fetch("http://localhost:8080/emotion/" + id,
+                {
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+            if (response.ok) {
+                requestEmotions();
+            } else {
+                showError(response);
+            }
+        } catch (error) {
+            alert("Houve um erro ao tentar excluir a emoção. Tente novamente mais tarde.");
+        }
+    }
+
+    function openModalEditEmotion(id, emotion, emoji, description) {
+        let selectInput = document.querySelector("#emotionEdit");
+        selectInput.value = emoji + "/" + emotion;
+
+        let descriptionInput = document.querySelector("#descriptionEdit");
+        descriptionInput.value = description;
+
+        let idEmotion = document.querySelector("#idEmotion");
+        idEmotion.value = id;
+
+        let modal = new bootstrap.Modal(document.querySelector("#editModalEmotion"));
+        modal.show();
+    }
+
+    requestEmotions();
+
+    const registerEmotion = document.querySelector("#registerEmotion");
+    registerEmotion.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        let emojiEmotion = document.querySelector("#emotion").value.split("/");
+
+        let emotion = {
+            data: getDate(),
+            description: document.querySelector("#description").value,
+            emoji: emojiEmotion[0],
+            emotion: emojiEmotion[1]
+        }
+
+        try {
+            let response = await fetch("http://localhost:8080/emotion/" + userId,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(emotion)
+                }
+            );
+
+            if (response.ok) {
+                let modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+                modal.hide();
+                registerEmotion.reset();
+                requestEmotions();
+            } else {
+                showError(response);
+            }
+        } catch (error) {
+            alert("Não foi possível cadastrar sua emoção. Tente novamente mais tarde.");
+        }
+    });
+
+    const formEmotionEdit = document.querySelector("#formEmotionEdit");
+    formEmotionEdit.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        try {
+            let emojiEmotion = formEmotionEdit.querySelector("#emotionEdit").value.split("/");
+
+            let emotionUpdate = {
+                id: formEmotionEdit.querySelector("#idEmotion").value,
+                data: getDate(),
+                description: formEmotionEdit.querySelector("#descriptionEdit").value,
+                emoji: emojiEmotion[0],
+                emotion: emojiEmotion[1]
+            };
+
+            let response = await fetch("http://localhost:8080/emotion/" + userId,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(emotionUpdate)
+                }
+            );
+
+            if (response.ok) {
+                const modal = bootstrap.Modal.getInstance(document.querySelector("#editModalEmotion"));
+                modal.hide();
+                requestEmotions();
+            } else {
+                showError(response);
+            }
+
+        } catch (error) {
+            alert("Houve um erro ao tentar atualizar sua emoção. Tente novamente mais tarde.");
+        }
+    })
 
 </script>
 

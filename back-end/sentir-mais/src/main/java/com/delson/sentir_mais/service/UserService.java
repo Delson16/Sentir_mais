@@ -2,10 +2,11 @@ package com.delson.sentir_mais.service;
 
 
 import com.delson.sentir_mais.domain.User;
-import com.delson.sentir_mais.dto.UserLoginDto;
 import com.delson.sentir_mais.dto.UserRegisterDto;
 import com.delson.sentir_mais.exception.LoginAlreadyExistsException;
+import com.delson.sentir_mais.exception.UserNotFoundException;
 import com.delson.sentir_mais.repository.UserRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,7 +40,16 @@ public class UserService implements UserDetailsService {
         );
 
         userRepository.save(user);
-
+    }
+    
+    public User getUser(String id){
+        Optional<User> user = userRepository.findById(id);
+        
+        if(user.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        
+        return user.get();
     }
     
 

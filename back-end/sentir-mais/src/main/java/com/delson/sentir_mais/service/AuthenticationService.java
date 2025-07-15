@@ -24,7 +24,7 @@ public class AuthenticationService{
         var auth = this.authenticationManager.authenticate(usernamePassword);
         User user = (User) auth.getPrincipal();
         String token = tokenService.generateToken(user);
-        return new UserLoginResponseDto(user.getName(), token);
+        return new UserLoginResponseDto(user.getName(), token, user.getId());
     }
     
     public UserLoginResponseDto login(UserRegisterDto data){
@@ -32,7 +32,7 @@ public class AuthenticationService{
         var auth = this.authenticationManager.authenticate(usernamePassword);
         User user = (User) auth.getPrincipal();
         String token = tokenService.generateToken(user);
-        return new UserLoginResponseDto(user.getName(), token);
+        return new UserLoginResponseDto(user.getName(), token, user.getId());
     }
 
 }

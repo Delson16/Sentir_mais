@@ -13,7 +13,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> genericException(Exception e) {
-        var body = new ErrorMessage("Erro Inesperado", HttpStatus.INTERNAL_SERVER_ERROR);
+        var body = new ErrorMessage("Erro Inesperado: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
 
@@ -33,6 +33,18 @@ public class GlobalControllerAdvice {
     public ResponseEntity badCredentialsException(){
         var body = new ErrorMessage("Login ou senha inválidos", HttpStatus.BAD_REQUEST);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+    
+    @ExceptionHandler(EmotionNotFoundException.class)
+    public ResponseEntity emotionNotFoundException(EmotionNotFoundException e){
+        var body = new ErrorMessage(e.getMessage(), HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+    
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity userNotFoundException(UserNotFoundException e){
+        var body = new ErrorMessage(e.getMessage(), HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
 }
